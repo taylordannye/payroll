@@ -24,9 +24,10 @@ Route::get('/', function () {
 Route::get('/dashboard', [dashboardController::class, 'showDashboardIndex'])->name('dashboard');
 Route::get('/sign-up', [signupController::class, 'showSignupPage'])->name('signup');
 Route::post('/sign-up', [signupController::class, 'authorizeUserSignup'])->name('signup.post');
+Route::get('/sign-up/complete', [signupController::class, 'completeRegistrationProcess'])->name('signup-complete');
 Route::get('/verify', [verificationController::class, 'showVerificationPage'])->name('verification');
 Route::post('/verify', [verificationController::class, 'verifySignupOtp'])->name('verification.post');
-Route::get('/verify/resend', [verificationController::class, 'resendVerificationCode'])->name('resend-verification');
+Route::get('/verify/resend', [verificationController::class, 'resendOtp'])->name('resend-verification');
 Route::get('sign-in', [signinController::class, 'showSigninPage'])->name('signin');
 Route::get('/forgot-password', [randrPasswordController::class, 'showForgotPasswordPage'])->name('forgot-password');
 Route::post('/forgot-password', [randrPasswordController::class, 'sendPasswordResetInstructions'])->name('forgot-password.post');

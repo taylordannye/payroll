@@ -82,4 +82,24 @@ class signupController extends Controller
 
         return redirect()->route('verification', ['request_id' => $request_id, 'email' => $request->email]);
     }
+
+    public function completeRegistrationProcess(Request $request)
+    {
+        $email = $request->input('email');
+
+        // Find the user by email
+        $user = User::where('email', $email)->first();
+
+        if (!$user) {
+            // The user doesn't exist with the provided email
+            return redirect()->route('signup')->with('error', 'Invalid email. Please try again.');
+        }
+
+        // Check if allow_signup is set to false
+        if ($user->allow_signup === false) {
+            return redirect()->route('signup')->with('error', 'Unauthorized access. Please sign up to complete the registration.');
+        }
+
+        return view('auth.signup-complete', ['email' => $email]);
+    }
 }

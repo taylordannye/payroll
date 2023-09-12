@@ -73,19 +73,39 @@ class verificationController extends Controller
 
         // Check if the OTP matches
         if ($request->input('otp') == $user->otp) {
+            $signupRequestID = signupRequestVerification::where('email', $email)->first();
             // OTP is correct, you can proceed with account activation
             // For example, set the user's account as active in your 'users' table
-            $user->update([
-                'otp' => null,
-                'otp_expires_at' => null,
-                'allow_signup' => true, // or 1
-            ]);
-
+            $user->otp = null;
+            $user->otp_expires_at = null;
+            $user->allow_signup = true;
+            $user->save();
+            $signupRequestID->delete();
             // Redirect to a success page
-            return redirect()->route('signup')->with('success', 'Account activated successfully.');
+            return redirect()->route('signup-complete', ['email' => $email])->with('success', 'Your email has been verified successfully, please complete your registration process here.');
         } else {
             // Invalid OTP
             return redirect()->route('verification', ['request_id' => $request_id, 'email' => $email])->with('error', 'The OTP code entered is incorrect. Please provide the correct OTP.');
         }
+    }
+
+    function resendOtp(Request $request)
+    {
+        $email = $request->input('email');
+
+        $user = User::where('email', $email)->first();
+
+        if (!$user->otp_expires_at || $user->otp_expires_at->diffInMinutes(now()) > 30) {
+            // OTP has expired or doesn't exist, generate a new OTP
+            $otpCode = str_pad(mt_rand(1, 999999), 6, '0', STR_PAD_LEFT);
+            $user->otp = $otpCode;
+            $user->otp_expires_at = now()->addMinutes(30); // Set a new expiration time (e.g., 30 minutes from now)
+        }
+        // Save the user model with the new OTP and expiration time (if generated)
+        $user->save();
+
+        // Send the OTP to the user's email
+        // Mail::to($user->email)->send(new OtpMail($user->otp));
+        return redirect()->back()->with('success', 'A new OTP code has been sent to ' .$user->email);
     }
 }
