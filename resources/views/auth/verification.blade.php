@@ -16,7 +16,7 @@
     @include('utilities.auth.header')
     <main class="auth-container">
         <div class="auth-wrapper">
-            <form action="#" method="POST" autocomplete="off" class="onboarding" id="authentication">
+            <form action="{{ route('verification.post') }}" method="POST" autocomplete="off" class="onboarding" id="authentication">
                 @include('auth.error&success.error')
                 @include('auth.error&success.success')
                 @csrf
@@ -30,12 +30,18 @@
                 <div class="divider-liner">
                     <span class="line"></span>Please enter the OTP sent to your email<span class="line"></span>
                 </div>
+                <div class="input-group">
+                    <input type="text" hidden name="request_id" value="{{ $request_id }}">
+                </div>
+                <div class="input-group">
+                    <input type="text" hidden name="email" value="{{ $email }}">
+                </div>
                 <div class="input-group otp-postion-change">
-                    <input type="number" id="otp" name="otp" length="6" placeholder="000000" value="{{ old('otp') }}"
+                    <input type="number" id="otp" name="otp" class="otp-placeholder-change" length="6" placeholder="eg.193053" value="{{ old('otp') }}"
                         @required(true)>
-                        <div class="security-img">
+                        {{-- <div class="security-img">
                             <img src="{{ asset('storage/utilities/components/auth/ae5oyfyfmp5up4lm97ek.png') }}" alt="security" title="Secured-Input">
-                        </div>
+                        </div> --}}
                 </div>
                 <div class="btn-group">
                     <button type="submit" id="submit" class="submit-btn">Submit</button>
@@ -48,7 +54,7 @@
                     </div>
                 </div>
                 <div class="auth-membership-status">
-                    <p>Didn't receive the OTP? <a href="{{ route('resend-verification') }}">Resend</a></p>
+                    <p>Didn't receive the OTP? <a href="{{ route('resend-verification', ['request_id' => $request_id, 'email' => $email]) }}">Resend</a></p>
                 </div>
             </form>
         </div>

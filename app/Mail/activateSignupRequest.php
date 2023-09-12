@@ -13,14 +13,18 @@ class activateSignupRequest extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $activationLink;
     public $user;
+    public $time;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($user)
+    public function __construct(array $data)
     {
-        $this->user = $user;
+        $this->activationLink = $data['activation_link'];
+        $this->user = $data['user'];
+        $this->time = $data['time'];
     }
 
     /**
@@ -29,7 +33,7 @@ class activateSignupRequest extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Your signup activation code is: ' .$this->user->otp,
+            subject: 'Complete your registration for ' . config('app.name'),
         );
     }
 

@@ -52,7 +52,7 @@ class randrPasswordController extends Controller
         $passwordResetToken = new PasswordResetToken();
         $passwordResetToken->email = $request->email;
         $passwordResetToken->token = $token;
-        $passwordResetToken->created_at = now();
+        $passwordResetToken->created_at = Carbon::now();
         $passwordResetToken->save();
 
         $actionLink = route('reset-password', ['token' => $token, 'email' => $request->email]);
