@@ -22,17 +22,21 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/dashboard', [dashboardController::class, 'showDashboardIndex'])->name('dashboard');
-Route::get('/sign-up', [signupController::class, 'showSignupPage'])->name('signup');
-Route::post('/sign-up', [signupController::class, 'authorizeUserSignup'])->name('signup.post');
-Route::get('/sign-up/completion', [signupController::class, 'completeRegistrationProcess'])->name('signup-complete');
-Route::post('/sign-up/completion', [signupController::class, 'completeProcess'])->name('signup-complete.post');
-Route::get('/verify', [verificationController::class, 'showVerificationPage'])->name('verification');
-Route::post('/verify', [verificationController::class, 'verifySignupOtp'])->name('verification.post');
-Route::get('/verify/resend', [verificationController::class, 'resendOtp'])->name('resend-verification');
-Route::get('sign-in', [signinController::class, 'showSigninPage'])->name('signin');
-Route::post('sign-in', [signinController::class, 'signin'])->name('signin.post');
-Route::get('/forgot-password', [randrPasswordController::class, 'showForgotPasswordPage'])->name('forgot-password');
-Route::post('/forgot-password', [randrPasswordController::class, 'sendPasswordResetInstructions'])->name('forgot-password.post');
-Route::get('/forgot-password/reset', [randrPasswordController::class, 'showResetPasswordPage'])->name('reset-password');
-Route::post('/forgot-password/reset', [randrPasswordController::class, 'resetPasswordHandler'])->name('reset-password.post');
-Route::get('/forgot-password/reset/cancel', [randrPasswordController::class, 'cancelPasswordReset'])->name('cancel-reset');
+Route::group(['middleware' => 'guest', 'location.block'], function () {
+    Route::get('/sign-up', [signupController::class, 'showSignupPage'])->name('signup');
+    Route::post('/sign-up', [signupController::class, 'authorizeUserSignup'])->name('signup.post');
+    Route::get('/sign-up/completion', [signupController::class, 'completeRegistrationProcess'])->name('signup-complete');
+    Route::post('/sign-up/completion', [signupController::class, 'completeProcess'])->name('signup-complete.post');
+    Route::get('/verify', [verificationController::class, 'showVerificationPage'])->name('verification');
+    Route::post('/verify', [verificationController::class, 'verifySignupOtp'])->name('verification.post');
+    Route::get('/verify/resend', [verificationController::class, 'resendOtp'])->name('resend-verification');
+    Route::get('sign-in', [signinController::class, 'showSigninPage'])->name('signin');
+    Route::post('sign-in', [signinController::class, 'signin'])->name('signin.post');
+    Route::get('/forgot-password', [randrPasswordController::class, 'showForgotPasswordPage'])->name('forgot-password');
+    Route::post('/forgot-password', [randrPasswordController::class, 'sendPasswordResetInstructions'])->name('forgot-password.post');
+    Route::get('/forgot-password/reset', [randrPasswordController::class, 'showResetPasswordPage'])->name('reset-password');
+    Route::post('/forgot-password/reset', [randrPasswordController::class, 'resetPasswordHandler'])->name('reset-password.post');
+    Route::get('/forgot-password/reset/cancel', [randrPasswordController::class, 'cancelPasswordReset'])->name('cancel-reset');
+});
+// SignOut User
+Route::get('/signout', [signinController::class, 'signout'])->name('signout');

@@ -14,7 +14,7 @@
 
 <body class="antialiased">
     @include('utilities.auth.header')
-    {{-- @include('utilities.loader') --}}
+    @include('utilities.loader')
     <main class="auth-container contents">
         <div class="auth-wrapper">
             <form action="{{ route('signin.post') }}" method="POST" autocomplete="off" class="singin" id="authentication">
@@ -55,6 +55,7 @@
             </form>
         </div>
     </main>
+    <script src="{{ asset('storage/utilities/auth/js/jquery.min.js') }}"></script>
     <script src="{{ asset('storage/utilities/auth/js/6urye68tv3k0oo3n20sd.js') }}"></script>
 </body>
 

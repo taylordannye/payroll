@@ -95,4 +95,11 @@ class signinController extends Controller
     {
         event(new Lockout($request));
     }
+
+    public function signout()
+    {
+        Auth::logout();
+
+        return redirect()->route('signin');
+    }
 }

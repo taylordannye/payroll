@@ -1,10 +1,9 @@
-document.addEventListener("DOMContentLoaded", function () {
-    // Delay the hiding of the loader for 7 to 10 seconds (7000 to 10000 milliseconds)
-    setTimeout(function () {
-        document.querySelector(".page-loader").style.display = "none";
-    }, Math.floor(Math.random() * 3000) + 7000); // Generates a random delay between 7s and 10s
+// Preloader
+$(window).on('load', function () {
+	$('.lds-ellipsis').fadeOut(); // will first fade out the loading animation
+	$('.preloader').delay(333).fadeOut('slow'); // will fade out the white DIV that covers the website.
+	$('body').delay(333);
 });
-
 
 document.addEventListener("DOMContentLoaded", function () {
     const submitButton = document.getElementById("submit");

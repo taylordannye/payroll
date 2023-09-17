@@ -1,4 +1,8 @@
-<div id="loader2" class="page-loader">
-    <div class="loader2"></div>
-    <i class="icofont-lock lock"></i>
-</div>
+<div class="preloader">
+   <div class="lds-ellipsis">
+     <div></div>
+     <div></div>
+     <div></div>
+     <div></div>
+   </div>
+ </div>
