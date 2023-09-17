@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>We're glad to see you back! - {{ config('app.name') }}</title>
     <link rel="stylesheet" type="text/css" href="{{ asset('storage/utilities/style.css?v=1.0') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('storage/utilities/components/header.css?v=1.0') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('storage/utilities/auth/header.css?v=1.0') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('storage/utilities/auth/authorization.css?v=1.0') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('storage/utilities/auth/utilities.css?v=1.0') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('storage/assets/fonts/icofont/icofont.min.css?v=1.0') }}">
@@ -14,10 +14,10 @@
 
 <body class="antialiased">
     @include('utilities.auth.header')
-    @include('utilities.loader')
+    {{-- @include('utilities.loader') --}}
     <main class="auth-container contents">
         <div class="auth-wrapper">
-            <form action="#" method="POST" autocomplete="off" class="singin" id="authentication">
+            <form action="{{ route('signin.post') }}" method="POST" autocomplete="off" class="singin" id="authentication">
                 @include('auth.error&success.error')
                 @include('auth.error&success.success')
                 @csrf
@@ -28,7 +28,7 @@
                     <span class="line"></span>Continue with email & password<span class="line"></span>
                 </div>
                 <div class="input-group">
-                    <input type="email" id="email" name="email" placeholder="example@gmail.com"
+                    <input type="email" id="email" name="email" placeholder="example@gmail.com" value="{{ old('email') }}"
                         @required(true)>
                 </div>
                 <div class="input-group">

@@ -12,7 +12,7 @@
         </a>
         <div class="user-greeting-status">
             <h1>Good Morning,</h1>
-            <p>creativeartghana@gmail.com</p>
+            <p>{{ auth()->user()->email }}</p>
         </div>
     </div>
     <nav>
@@ -43,8 +43,8 @@
             <p>Profile</p>
         </div>
         <div class="user-logout logout-hyperlink m-dash">
-            <img src="{{ asset('storage/utilities/components/auth/0g8ty08qpsm8sjjslgwz.png') }}" alt="logout" id="logout utilizer-img">
-            <p>Signout</p>
+            <img src="{{ asset('storage/utilities/components/auth/icons8-refresh.svg') }}" id="refresh utilizer-img" alt="refresh">
+            <p>Refresh Page</p>
         </div>
         <button class="btn lang-btn" id="lang-btn"><img
                 src="{{ asset('storage/utilities/components/auth/2shy6ikkqb31nxrcrvck.png') }}"

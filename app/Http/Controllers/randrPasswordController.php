@@ -21,6 +21,16 @@ class randrPasswordController extends Controller
         return view('auth.forgot-password');
     }
 
+    function generateRandomString()
+    {
+        $segment1 = base64_encode(Str::random(6));
+        $segment2 = base64_encode(Str::random(6));
+        $segment3 = base64_encode(Str::random(6));
+        $segment4 = base64_encode(Str::random(6));
+
+        return "{$segment1}-{$segment2}-{$segment3}-{$segment4}";
+    }
+
     public function sendPasswordResetInstructions(Request $request)
     {
         $request->validate([
@@ -43,11 +53,11 @@ class randrPasswordController extends Controller
             if ($tokenCreatedAt->lte($fourHoursAgo)) {
                 $existingToken->delete();
             } else {
-                return redirect(route('forgot-password'))->with('error', "There's a current operation in session, please use the previous link to reset your password or wait for 4 hours to reset it again.");
+                return redirect(route('forgot-password'))->with('error', "There's a current operation in session, please use the previous link to reset your password or wait for 4 hours from the requested time to reset it again.");
             }
         }
 
-        $token = base64_encode(Str::random(40));
+        $token = $this->generateRandomString();
 
         $passwordResetToken = new PasswordResetToken();
         $passwordResetToken->email = $request->email;
@@ -64,16 +74,16 @@ class randrPasswordController extends Controller
             'time' => $time,
         ];
 
-        // try {
-        //     Mail::to($request->email)->send(new resetPasswordInstructions($mailData));
-        // } catch (\Exception $e) {
-        //     $errorMessage = 'There was an issue sending the password reset instructions. Please try again later. Or try checking your network connection and try again.';
-        //     return redirect()->back()->with('error', $errorMessage);
-        // }
+        try {
+            Mail::to($request->email)->send(new resetPasswordInstructions($mailData));
+        } catch (\Exception $e) {
+            $errorMessage = 'There was an issue sending the password reset instructions. Please try again later. Or try checking your network connection and try again.';
+            return redirect()->back()->with('error', $errorMessage);
+        }
 
-        echo ($actionLink);
+        // echo ($actionLink);
 
-        // return back()->with('success', "An email with the password reset instructions has been sent to your email address. Please check your Spams/Junk folder if not found in inbox.");
+        return back()->with('success', "An email with the password reset instructions has been sent to your email address. Please check your Spams/Junk folder if not found in inbox.");
     }
 
     public function showResetPasswordPage(Request $request)

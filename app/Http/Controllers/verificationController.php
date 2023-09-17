@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\signupRequestVerification;
@@ -31,7 +32,7 @@ class verificationController extends Controller
         if ($request_idAgeInHours > 24) {
             $signupRequestID->delete();
             $user->delete();
-            return redirect(route('signup'))->with('error', 'Unfortunately, your signup process was not completed within the 24-hour timeframe provided. As a result, all records associated with your account have been permanently deleted. You are welcome to initiate a new signup process and complete your account registration at your earliest convenience.');
+            return redirect(route('signup'))->with('error', 'Unfortunately, your signup process was not completed within 24 hours. As a result, all records associated with your account have been permanently deleted.');
         }
 
         return view('auth.verification', ['request_id' => $request_id, 'email' => $email]);
@@ -76,6 +77,7 @@ class verificationController extends Controller
             $signupRequestID = signupRequestVerification::where('email', $email)->first();
             // OTP is correct, you can proceed with account activation
             // For example, set the user's account as active in your 'users' table
+            $user->email_verified_at = Carbon::now();
             $user->otp = null;
             $user->otp_expires_at = null;
             $user->allow_signup = true;
