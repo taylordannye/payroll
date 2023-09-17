@@ -22,7 +22,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/dashboard', [dashboardController::class, 'showDashboardIndex'])->name('dashboard');
-Route::group(['middleware' => 'guest', 'location.block'], function () {
+Route::group(['middleware' => ['guest', 'location.block']], function () {
     Route::get('/sign-up', [signupController::class, 'showSignupPage'])->name('signup');
     Route::post('/sign-up', [signupController::class, 'authorizeUserSignup'])->name('signup.post');
     Route::get('/sign-up/completion', [signupController::class, 'completeRegistrationProcess'])->name('signup-complete');
