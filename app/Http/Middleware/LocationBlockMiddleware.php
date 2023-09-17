@@ -21,7 +21,7 @@ class LocationBlockMiddleware
         // Check if the IP address is localhost (127.0.0.1 or ::1) or if it's in a private IP range
         if ($ip === '127.0.0.1' || $ip === '::1' || filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
             // User is on localhost or using a private IP, block access
-            abort(403, 'Access from private IP\'s not allowed.');
+            abort(403, 'Private IP\'s not allowed.');
         }
 
         // Make a request to IPinfo.io to get location information based on the IP address
