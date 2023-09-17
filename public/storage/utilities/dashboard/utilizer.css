@@ -1,0 +1,11 @@
+.annoucement-wrapper{
+    position: fixed;
+    background: var(--background-color-alt-1);
+    top: 0%;
+    width: 100%;
+    padding: var(--large-padding);
+    color: var(--background-color);
+    text-align: center;
+    font-size: 0.8rem;
+    z-index: 999999;
+}
