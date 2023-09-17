@@ -33,8 +33,8 @@ class resetPasswordInstructions extends Mailable
      */
     public function envelope(): Envelope
     {
-        $name = ucfirst($this->user->name);
-        $subject = 'Password Reset Instruction For - ' . $name . '';
+        $surname = ucfirst($this->user->surname);
+        $subject = 'Password Reset Instruction For - ' . $surname . '';
 
         return new Envelope(
             subject: new HtmlString($subject),

@@ -6,7 +6,7 @@
 </head>
 
 <body
-    style="font-family: 'Muli', sans-serif; font-size: 14px; background: #f4f6f9; line-height: 1.6; margin: 0; padding: 0;">
+    style="font-family: 'Muli', sans-serif; font-size: 14px; background: #f4f6f9; line-height: 1.6; margin: 0; padding: 2rem;">
     <div class="content" style="max-width: 600px; margin: 0 auto; background: #fff; padding: 30px;">
         <!-- Preheader Text -->
         <span

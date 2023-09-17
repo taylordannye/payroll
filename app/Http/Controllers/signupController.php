@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Mail\activateSignupRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\QueryException;
@@ -141,9 +142,6 @@ class signupController extends Controller
                 'required',
                 'regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
             ],
-            'agree' => [
-                'required',
-            ],
         ]);
 
         $user = User::where('email', $request->input('email'))->first();
@@ -160,7 +158,7 @@ class signupController extends Controller
             $user->password = Hash::make($request->input('password'));
             $user->allow_signup = false;
             $user->save();
-
+            Auth::login($user);
             return redirect(route('dashboard'))->with('success', 'Your account registration has been completed successfully');
         } catch (QueryException $e) {
             // Handle database-related errors (e.g., network issues)
