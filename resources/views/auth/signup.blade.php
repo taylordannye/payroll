@@ -13,6 +13,8 @@
 
 <body class="antialiased">
     @include('utilities.auth.header')
+    @include('utilities.loader')
+    @include('cookie-consent::index')
     <main class="auth-container">
         <div class="auth-wrapper">
             <form action="{{ route('signup.post') }}" method="POST" autocomplete="off" class="onboarding" id="authentication">
@@ -77,7 +79,7 @@
             });
         });
     </script>
-
+    <script src="{{ asset('storage/utilities/auth/js/jquery.min.js') }}"></script>
     <script src="{{ asset('storage/utilities/auth/js/6urye68tv3k0oo3n20sd.js') }}"></script>
 </body>
 

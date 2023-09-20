@@ -8,6 +8,7 @@
     animation-timing-function: ease-in-out;
     animation-duration: 1s;
     animation-fill-mode: forwards;
+    animation-delay: .6s;
 }
 
 @keyframes slide-in-up {
@@ -107,4 +108,11 @@
     .success-info {
         padding: 20px;
     }
+}
+
+.js-cookie-consent {
+    position: absolute;
+    bottom: 0;
+    padding: 10px;
+    width: 100%;
 }

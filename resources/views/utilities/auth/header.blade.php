@@ -10,13 +10,20 @@
             </div>
         </a>
         <a href="" class="logo-mobile-tab-alternative">
-            <img src="{{ asset('storage/assets/images/1zuz3a9bwqa0b2k6cnno.png') }}"
-                alt="Logo" width="40px" title="{{ config('app.name') }}">
+            <img src="{{ asset('storage/assets/images/1zuz3a9bwqa0b2k6cnno.png') }}" alt="Logo" width="40px"
+                title="{{ config('app.name') }}">
         </a>
     </div>
     <div class="actions">
         <button class="btn lang-btn" id="lang-btn"><img
-                src="{{ asset('storage/utilities/components/auth/2shy6ikkqb31nxrcrvck.png') }}"
-                alt="Translator" width="18px">&nbsp;{{ app()->getLocale() }}</button>
+                src="{{ asset('storage/assets/images/20151118161037!Flag_of_the_United_States.svg') }}" alt="en_US"
+                title="en_US" width="50px"></button>
+                <div class="options">
+                    <ul>
+                        <li>Spanish</li>
+                        <li>Korea</li>
+                        <li></li>
+                    </ul>
+                </div>
     </div>
 </header>

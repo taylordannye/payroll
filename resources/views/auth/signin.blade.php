@@ -15,7 +15,7 @@
 <body class="antialiased">
     @include('utilities.auth.header')
     @include('utilities.loader')
-    <main class="auth-container contents">
+    <main class="auth-container">
         <div class="auth-wrapper">
             <form action="{{ route('signin.post') }}" method="POST" autocomplete="off" class="singin" id="authentication">
                 @include('auth.error&success.error')

@@ -12,7 +12,7 @@
 </head>
 
 <body class="antialiased">
-    {{-- @include('utilities.loader') --}}
+    @include('utilities.loader')
     <main class="auth-container contents">
         <div class="auth-wrapper">
             <div class="auth-cancel">
@@ -133,6 +133,7 @@
             </form>
         </div>
     </main>
+    <script src="{{ asset('storage/utilities/auth/js/jquery.min.js') }}"></script>
     <script src="{{ asset('storage/utilities/auth/js/6urye68tv3k0oo3n20sd.js') }}"></script>
 </body>
 
