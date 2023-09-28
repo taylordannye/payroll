@@ -5,20 +5,21 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\signupRequestVerification;
 
 class verificationController extends Controller
 {
     public function showVerificationPage(Request $request)
     {
-        // Check if the request_id and email are valid
-        $request_id = $request->input('request_id');
+        // Check if the state and email are valid
+        $state = $request->input('state');
         $email = $request->input('email');
 
         $signupRequestID = signupRequestVerification::where('email', $email)->first();
         $user = User::where('email', $email)->first();
 
-        if (!$signupRequestID || $signupRequestID->request_id !== $request_id) {
+        if (!$signupRequestID || $signupRequestID->state !== $state) {
             return redirect(route('signup'))->with('error', 'Oops, it seems there\'s an issue with the URL you\'re using. Contact technical support if the issue persists.');
         }
 
@@ -27,21 +28,21 @@ class verificationController extends Controller
         $now = now();
 
         // Check if the request_id is more than 24 Hours old
-        $request_idAgeInHours = $createdAt->diffInHours($now);
+        $stateAgeInHours = $createdAt->diffInHours($now);
 
-        if ($request_idAgeInHours > 24) {
+        if ($stateAgeInHours > 24) {
             $signupRequestID->delete();
             $user->delete();
             return redirect(route('signup'))->with('error', 'Unfortunately, your signup process was not completed within 24 hours. As a result, all records associated with your account have been permanently deleted.');
         }
 
-        return view('auth.verification', ['request_id' => $request_id, 'email' => $email]);
+        return view('auth.verification', ['state' => $state, 'email' => $email]);
     }
 
     public function verifySignupOtp(Request $request)
     {
         $request->validate([
-            'request_id' => [
+            'state' => [
                 'required'
             ],
             'email' => [
@@ -55,7 +56,7 @@ class verificationController extends Controller
         ]);
 
         // Check if the request_id and email are valid
-        $request_id = $request->input('request_id');
+        $state = $request->input('state');
         $email = $request->input('email');
 
         // Find the user by email
@@ -63,13 +64,13 @@ class verificationController extends Controller
 
         if (!$user) {
             // The user doesn't exist with the provided email
-            return redirect()->route('verification',  ['request_id' => $request_id, 'email' => $email])->with('error', 'Invalid email. Please try again.');
+            return redirect()->route('verification',  ['state' => $state, 'email' => $email])->with('error', 'Something terrible happened, contact support for assistance is issue persists.');
         }
 
         // Check if the OTP has expired
-        if ($user->otp_expires_at->diffInMinutes(now()) > 30) {
+        if ($user->otp_expires_at->diffInMinutes(Carbon::now()) > 30) {
             // OTP has expired, you can handle this case (e.g., show an error message)
-            return redirect()->route('verification', ['request_id' => $request_id, 'email' => $email])->with('error', 'That OTP code has expired. Please request for a new OTP.');
+            return redirect()->route('verification', ['state' => $state, 'email' => $email])->with('error', 'That OTP code has expired. Please request for a new OTP.');
         }
 
         // Check if the OTP matches
@@ -83,11 +84,12 @@ class verificationController extends Controller
             $user->allow_signup = true;
             $user->save();
             $signupRequestID->delete();
+            Auth::login();
             // Redirect to a success page
-            return redirect()->route('signup-complete', ['email' => $email])->with('success', 'Your email has been verified successfully, please complete your registration process here.');
+            return redirect()->route('signup-complete', ['email' => $email]);
         } else {
             // Invalid OTP
-            return redirect()->route('verification', ['request_id' => $request_id, 'email' => $email])->with('error', 'The OTP code entered is incorrect. Please provide the correct OTP.');
+            return redirect()->route('verification', ['state' => $state, 'email' => $email])->with('error', 'The OTP code entered is incorrect. Please provide the correct OTP.');
         }
     }
 

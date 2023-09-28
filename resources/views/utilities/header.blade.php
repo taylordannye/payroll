@@ -10,8 +10,8 @@
             </div>
         </a>
         <a href="" class="logo-mobile-tab-alternative">
-            <img src="{{ asset('storage/assets/images/1zuz3a9bwqa0b2k6cnno.png') }}"
-                alt="Logo" width="40px" title="{{ config('app.name') }}">
+            <img src="{{ asset('storage/assets/images/1zuz3a9bwqa0b2k6cnno.png') }}" alt="Logo" width="40px"
+                title="{{ config('app.name') }}">
         </a>
     </div>
     <nav>
@@ -27,15 +27,14 @@
                     </ul>
                 </div>
             </li>
-            <li><a href="" id="link3">We're Hiring</a> <i id="dropdown-icon-header"
-                    class="icofont-caret-down"></i>
+            <li><a href="" id="link3">About Us</a>
+            </li>
+            <li><a href="" id="link4">Pricings</a><i id="dropdown-icon-header" class="icofont-caret-down"></i>
                 <div class="dropdown__menu">
                     <ul>
                         <li><a href="">Apply for a job</a></li>
                     </ul>
                 </div>
-            </li>
-            <li><a href="" id="link4">About</a>
             </li>
             <div class="btn-links-mobile-s-display mobile tablet">
                 <button class="btn login-btn"
@@ -51,9 +50,9 @@
             <div class="line"></div>
             <div class="line"></div>
         </div>
-        <button class="btn login-btn desktops-only" onclick="window.location.href='{{ route('signin') }}'">Sign In</button>
-        <button class="btn signup-btn desktops-only" onclick="window.location.href='{{ route('signup') }}'">Create an account</button>
-        <button class="btn lang-btn" id="lang-btn"><i
-                class="icofont-world"></i>&nbsp;{{ app()->getLocale() }}</button>
+        <button class="btn login-btn desktops-only" onclick="window.location.href='{{ route('signin') }}'">Sign
+            In</button>
+        <button class="btn signup-btn desktops-only" onclick="window.location.href='{{ route('signup') }}'">Create an
+            account</button>
     </div>
 </header>

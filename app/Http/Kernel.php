@@ -47,7 +47,7 @@ class Kernel extends HttpKernel
 
     /**
      * The application's middleware aliases.
-     *
+     * 
      * Aliases may be used instead of class names to conveniently assign middleware to routes and groups.
      *
      * @var array<string, class-string|string>
@@ -60,6 +60,7 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'location.block' => \App\Http\Middleware\LocationBlockMiddleware::class,
+        'incomplete.account' => \App\Http\Middleware\IncompleteAccountMiddleware::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'precognitive' => \Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests::class,
         'signed' => \App\Http\Middleware\ValidateSignature::class,

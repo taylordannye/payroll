@@ -22,11 +22,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/dashboard', [dashboardController::class, 'showDashboardIndex'])->name('dashboard');
-Route::group(['middleware' => ['guest', 'location.block']], function () {
+Route::group(['prefix' => 'dashboard'], function () {
+    Route::get('/sign-up/csp', [signupController::class, 'completeRegistrationProcess'])->name('signup-complete');
+    Route::post('/sign-up/csp', [signupController::class, 'completeProcess'])->name('signup-complete.post');
+    Route::get('/sign-up/csp/delete', [signupController::class, 'deleteUserData'])->name('delete-user-signupData');
+});
+Route::group(['middleware' => ['guest', 'guest', 'incomplete.account']], function () {
     Route::get('/sign-up', [signupController::class, 'showSignupPage'])->name('signup');
     Route::post('/sign-up', [signupController::class, 'authorizeUserSignup'])->name('signup.post');
-    Route::get('/sign-up/completion', [signupController::class, 'completeRegistrationProcess'])->name('signup-complete');
-    Route::post('/sign-up/completion', [signupController::class, 'completeProcess'])->name('signup-complete.post');
     Route::get('/verify', [verificationController::class, 'showVerificationPage'])->name('verification');
     Route::post('/verify', [verificationController::class, 'verifySignupOtp'])->name('verification.post');
     Route::get('/verify/resend', [verificationController::class, 'resendOtp'])->name('resend-verification');

@@ -9,7 +9,7 @@ class signupRequestVerification extends Model
 {
     use HasFactory;
 
-    protected $table = 'request_activations';
+    protected $table = 'state_activations';
 
     protected $fillable = [
         'request_id',

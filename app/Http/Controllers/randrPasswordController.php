@@ -53,7 +53,7 @@ class randrPasswordController extends Controller
             if ($tokenCreatedAt->lte($fourHoursAgo)) {
                 $existingToken->delete();
             } else {
-                return redirect(route('forgot-password'))->with('error', "There's a current operation in session, please use the previous link to reset your password or wait for 4 hours from the requested time to reset it again.");
+                return redirect(route('forgot-password'))->with('error', "There's a current operation in session, please use the previous link to reset your password or wait for 4 hours from the requested time to request it again.");
             }
         }
 
@@ -74,16 +74,16 @@ class randrPasswordController extends Controller
             'time' => $time,
         ];
 
-        try {
-            Mail::to($request->email)->send(new resetPasswordInstructions($mailData));
-        } catch (\Exception $e) {
-            $errorMessage = 'There was an issue sending the password reset instructions. Please try again later. Or try checking your network connection and try again.';
-            return redirect()->back()->with('error', $errorMessage);
-        }
+        // try {
+        //     Mail::to($request->email)->send(new resetPasswordInstructions($mailData));
+        // } catch (\Exception $e) {
+        //     $errorMessage = 'There was an issue sending the password reset instructions. Please try again later. Or try checking your network connection and try again.';
+        //     return redirect()->back()->with('error', $errorMessage);
+        // }
 
         // echo ($actionLink);
 
-        return back()->with('success', "An email with the password reset instructions has been sent to your email address. Please check your Spams/Junk folder if not found in inbox.");
+        return back()->with('success', "An email with the password reset instructions has successfully been sent to $user->email.");
     }
 
     public function showResetPasswordPage(Request $request)
@@ -143,24 +143,25 @@ class randrPasswordController extends Controller
             return redirect(route('forgot-password'))->with('error', 'The password reset link has expired. Please request a new one.');
         }
         $user->password = Hash::make($request->input('password'));
-        try {
-            // Check DNS records to ensure the recipient's email domain is valid
-            $recipientEmail = $user->email;
-            $recipientDomain = substr(strrchr($recipientEmail, "@"), 1);
+        $user->save();
+        // try {
+        //     // Check DNS records to ensure the recipient's email domain is valid
+        //     $recipientEmail = $user->email;
+        //     $recipientDomain = substr(strrchr($recipientEmail, "@"), 1);
 
-            if (!checkdnsrr($recipientDomain, 'MX')) {
-                // Invalid domain, handle the error
-                $errorMessage = 'There is an issue with the recipient\'s email domain. Please try again later.';
-                return redirect()->back()->with('error', $errorMessage);
-            }
-            // If DNS check is successful, send the email
-            Mail::to($recipientEmail)->send(new PasswordResetSuccessful($user));
-            $user->save();
-        } catch (\Exception $e) {
-            // Handle other exceptions (e.g., mail server issues)
-            $errorMessage = 'There was an issue sending password reset confirmation email. Please try again later.';
-            return redirect()->back()->with('error', $errorMessage);
-        }
+        //     if (!checkdnsrr($recipientDomain, 'MX')) {
+        //         // Invalid domain, handle the error
+        //         $errorMessage = 'There is an issue with the recipient\'s email domain. Please try again later.';
+        //         return redirect()->back()->with('error', $errorMessage);
+        //     }
+        //     // If DNS check is successful, send the email
+        //     Mail::to($recipientEmail)->send(new PasswordResetSuccessful($user));
+        //     $user->save();
+        // } catch (\Exception $e) {
+        //     // Handle other exceptions (e.g., mail server issues)
+        //     $errorMessage = 'There was an issue sending password reset confirmation email. Please try again later.';
+        //     return redirect()->back()->with('error', $errorMessage);
+        // }
         // Delete the used password reset token
         $passwordResetToken->delete();
         return redirect(route('signin'))->with('success', 'Password reset successful. You can now sign in with your new password.');

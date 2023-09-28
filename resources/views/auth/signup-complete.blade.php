@@ -13,10 +13,11 @@
 
 <body class="antialiased">
     @include('utilities.loader')
+    @include('utilities.popups.cancel-csp')
     <main class="auth-container contents">
         <div class="auth-wrapper">
             <div class="auth-cancel">
-                <button><i class="icofont-close"></i></button>
+                <button onclick="window.location.href='#alert'"><i class="icofont-close"></i></button>
             </div>
             {{-- <div class="flex-flow-logo l-m">
                 <img src="{{ asset('storage/utilities/components/auth/zfquta5n277irtsdvp3r.png') }}" alt="Logo"
@@ -26,13 +27,14 @@
                 id="authentication">
                 @include('auth.error&success.error')
                 @include('auth.error&success.success')
+                @include('auth.error&success.info')
                 @csrf
                 <div class="auth-heading">
-                    <span>Please complete your info</span>
+                    <span>Complete your signup process</span>
                 </div>
                 <div class="sub-head">
                     <p>This info is required to confirm the identity of <a
-                                href="maito:{{ $email }}">{{ $email }}</a>. It also helps us
+                            href="maito:{{ $email }}">{{ $email }}</a>. It also helps us
                         keep the
                         {{ config('app.name') }} community safe by complying with regulations that fight fraud. </p>
                 </div>
@@ -49,7 +51,8 @@
                 <div class="input-group-2 input-group">
                     <input type="text" class="space-right" name="firstname" id="firstname" placeholder="John"
                         value="{{ old('firstname') }}" @required(true)>
-                    <input type="text" name="surname" id="surname" placeholder="Doe" value="{{ old('surname') }}" @required(true)>
+                    <input type="text" name="surname" id="surname" placeholder="Doe" value="{{ old('surname') }}"
+                        @required(true)>
                 </div>
                 <div class="label-group">
                     <label for="dob">Date of birth <span id="required">*</span></label>
@@ -61,8 +64,8 @@
                     <label for="username">Username <span id="required">*</span></label>
                 </div>
                 <div class="input-group">
-                    <input type="text" name="username" id="username" placeholder="Create a username" value="{{ old('username') }}"
-                        @required(true)>
+                    <input type="text" name="username" id="username" placeholder="Create a username"
+                        value="{{ old('username') }}" @required(true)>
                 </div>
                 <div class="label-group">
                     <label for="password">Create a password <span id="required">*</span></label>

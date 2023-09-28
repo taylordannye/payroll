@@ -32,7 +32,7 @@
                     <span class="line"></span>Please enter the OTP sent to your email<span class="line"></span>
                 </div>
                 <div class="input-group">
-                    <input type="text" hidden name="request_id" value="{{ $request_id }}">
+                    <input type="text" hidden name="state" value="{{ $state }}">
                 </div>
                 <div class="input-group">
                     <input type="text" hidden name="email" value="{{ $email }}">
@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 <div class="auth-membership-status">
-                    <p>Didn't receive the OTP? <a href="{{ route('resend-verification', ['request_id' => $request_id, 'email' => $email]) }}">Resend</a></p>
+                    <p>Didn't receive the OTP? <onclick onclick="window.location.href='{{ route('resend-verification', ['state' => $state, 'email' => $email]) }}'">Resend</onclick></p>
                 </div>
             </form>
         </div>

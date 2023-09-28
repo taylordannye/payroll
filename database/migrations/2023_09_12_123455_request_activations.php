@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('request_activations', function (Blueprint $table) {
-            $table->string('request_id');
+        Schema::create('state_activations', function (Blueprint $table) {
+            $table->string('state');
             $table->string('email')->primary();
             $table->timestamp('created_at')->nullable();
         });
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('request_activations');
+        Schema::dropIfExists('state_activations');
     }
 };

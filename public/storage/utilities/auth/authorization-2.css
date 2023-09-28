@@ -14,6 +14,112 @@ body {
 
 }
 
+pop-up {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.288);
+    z-index: 2;
+    backdrop-filter: blur(1px);
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.6s ease-in-out;
+
+}
+
+pop-up:target{
+    opacity: 1;
+    visibility: visible;
+}
+
+pop-up:target .csp-main{
+    transform: rotate(10);
+}
+
+.csp-main {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    background: var(--background-color);
+    z-index: 99999;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    border-radius: var(--base-border-radius);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    transition: 0.8s ease-in-out;
+    transition-delay: 0.4s;
+}
+
+.csp-main>.prompt {
+    background: #f4f6f9;
+    padding: 12px;
+    border-bottom: 1px solid;
+    border-style: thin;
+    border-color: var(--divider-color);
+    font-size: 1rem;
+    border-top-left-radius: var(--base-border-radius);
+    border-top-right-radius: var(--base-border-radius);
+}
+
+.csp-main>.prompt>h5 {
+    font-family: var(--base-font-family);
+    font-weight: bold;
+    color: #111;
+    text-align: center;
+}
+
+.csp-main>.csp-contents {
+    padding: 20px;
+}
+
+.csp-main>.csp-contents>.csp-details {
+    font-size: 0.9rem;
+    text-align: left;
+    line-height: 1.1rem;
+    margin-bottom: var(--base-margin);
+}
+
+.csp-main>.csp-contents>.csp-action-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 10px;
+}
+
+.csp-main>.csp-contents>.csp-action-btn>.btn>button {
+    padding: 10px 56px;
+    background: none;
+    border: 1px solid;
+    border-style: thin;
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    cursor: pointer;
+    border-radius: var(--base-border-radius);
+    transition: 0.3s ease-in-out;
+    font-family: var(--base-font-family);
+}
+
+.csp-main>.csp-contents>.csp-action-btn>.delete>button {
+    border: 1px solid;
+    border-style: thin;
+    border-color: rgb(185, 30, 3);
+    margin-right: 0.6rem;
+    background: none;
+    color: rgb(185, 30, 3);
+}
+
+.csp-main>.csp-contents>.csp-action-btn>.btn>button:hover {
+    background: var(--primary-color);
+    color: var(--background-color);
+}
+
+.csp-main>.csp-contents>.csp-action-btn>.delete>button:hover {
+    background: rgb(185, 30, 3);
+    color: var(--background-color);
+}
+
 .loader-wrapper {
     position: fixed;
     width: 100%;
@@ -91,14 +197,16 @@ body {
     position: relative;
 }
 
-.auth-container>.auth-wrapper>.auth-cancel{
+.auth-container>.auth-wrapper>.auth-cancel {
     display: flex;
     align-items: center;
     justify-content: right;
 }
 
-.auth-container>.auth-wrapper>.auth-cancel>button{
+.auth-container>.auth-wrapper>.auth-cancel>button {
     background: none;
+    width: 40px;
+    height: 40px;
     padding: var(--base-padding);
     border-radius: 50%;
     border: 1px solid;
@@ -109,7 +217,7 @@ body {
     font-weight: bolder;
 }
 
-.auth-container>.auth-wrapper>.auth-cancel>button:focus{
+.auth-container>.auth-wrapper>.auth-cancel>button:focus {
     outline: none;
     border: 0.5px solid #0084ffb0;
     box-shadow: 0 0 0 3.4px rgba(0, 132, 255, 0.078);
@@ -121,14 +229,13 @@ body {
 }
 
 .auth-container>.auth-wrapper>form>.auth-heading {
-    /* font-weight: bolder; */
     text-align: left;
     margin-bottom: var(--base-margin);
     font-size: 2rem;
 }
 
 .auth-container>.auth-wrapper>form>.auth-heading>span {
-    font-family: var(--paypal-medium-font-family);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     letter-spacing: -1.8px;
     color: #555;
 }
@@ -176,6 +283,10 @@ body {
     border-color: var(--divider-color);
     font-family: var(--paypal-font-family);
     border-radius: var(--base-border-radius);
+}
+
+.auth-container>.auth-wrapper>form>.input-group>input:-webkit-autofill{
+    background-color: #fffcc8 !important;
 }
 
 .auth-container>.auth-wrapper>form>.input-group>input:focus {

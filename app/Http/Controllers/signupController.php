@@ -12,22 +12,13 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\QueryException;
 use App\Models\signupRequestVerification;
+use Ramsey\Uuid\Rfc4122\UuidV6;
 
 class signupController extends Controller
 {
     public function showSignupPage()
     {
         return view('auth.signup');
-    }
-
-    function generateRandomString()
-    {
-        $segment1 = base64_encode(Str::random(6));
-        $segment2 = base64_encode(Str::random(6));
-        $segment3 = base64_encode(Str::random(6));
-        $segment4 = base64_encode(Str::random(6));
-
-        return "{$segment1}-{$segment2}-{$segment3}-{$segment4}";
     }
 
     public function authorizeUserSignup(Request $request)
@@ -42,7 +33,7 @@ class signupController extends Controller
 
         // Generate a random OTP (e.g., 6 digits)
         $otpCode = str_pad(mt_rand(1, 999999), 6, '0', STR_PAD_LEFT);
-        $request_id = $this->generateRandomString();
+        $state = ucfirst(UuidV6::uuid6());
 
 
         // Create a new user with the provided email
@@ -52,17 +43,17 @@ class signupController extends Controller
         ]);
 
         $signupRequestID = new signupRequestVerification();
-        $signupRequestID->request_id = $request_id;
+        $signupRequestID->state = $state;
         $signupRequestID->email = $request->email;
         $signupRequestID->created_at = Carbon::now();
         $signupRequestID->save();
 
         // Set the OTP and expiration time
         $user->otp = $otpCode;
-        $user->otp_expires_at = Carbon::now()->addMinutes(30); // 30 minutes from now
+        $user->otp_expires_at = Carbon::now(); // 30 minutes from now
         $user->save();
 
-        $activationLink = route('verification', ['request_id' => $request_id, 'email' => $request->email]);
+        $activationLink = route('verification', ['state' => $state, 'email' => $request->email]);
         $time = $user->otp_expires_at;
 
         $mailData = [
@@ -93,7 +84,7 @@ class signupController extends Controller
         // Send a success message
         session()->flash('success', 'Please check ' . $user->email . ' for an OTP to verify your email address and complete registration.');
 
-        return redirect()->route('verification', ['request_id' => $request_id, 'email' => $request->email]);
+        return redirect()->route('verification', ['state' => $state, 'email' => $request->email]);
     }
 
     public function completeRegistrationProcess(Request $request)
@@ -159,10 +150,22 @@ class signupController extends Controller
             $user->allow_signup = false;
             $user->save();
             Auth::login($user);
-            return redirect(route('dashboard'))->with('success', 'Your account registration has been completed successfully');
+            return redirect(route('dashboard'));
         } catch (QueryException $e) {
             // Handle database-related errors (e.g., network issues)
             return redirect()->back()->withInput()->withErrors(['error' => 'A database error occurred while updating your information. Please try again later.']);
+        }
+    }
+
+    public function deleteUserData(Request $request) {
+        $email = $request->input('email');
+        $user = User::where('email',  $email)->first();
+
+        if (!$user) {
+            return redirect()->back()->withInput()->withErrors(['error' => 'User was not found']);
+        }else {
+            $user->delete();
+            return redirect(route('signup'))->with(['success', 'The operation was successfully executed on '.Carbon::now(). '']);
         }
     }
 }
