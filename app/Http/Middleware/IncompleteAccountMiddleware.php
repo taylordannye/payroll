@@ -16,11 +16,14 @@ class IncompleteAccountMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Check if the user is signed in and has an incomplete account.
-        if (Auth::check() && Auth::user()->registration_completed === false) {
-            return redirect(route('signup-complete'))->with(['info' => 'Please complete your signup process first']);
+        if (Auth::check()) {
+            $user = Auth::user();
+
+            if (!$user->registration_completed) {
+                return redirect()->route('signup.complete')->with('info', 'Please complete your signup process first');
+            }
         }
-        
+
         return $next($request);
     }
 }

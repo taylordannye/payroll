@@ -11,7 +11,6 @@ class dashboardController extends Controller
     {
         if (Auth::check()) {
             $user = Auth::user();
-    
             // Check if the user is authenticated and has completed the signup process
             if ($user->registration_completed) {
                 return view('Dashboard.index');
