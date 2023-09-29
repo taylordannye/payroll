@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Ramsey\Uuid\Rfc4122\UuidV6;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use App\Models\signupRequestVerification;
 
 class signinController extends Controller
 {
@@ -54,10 +56,22 @@ class signinController extends Controller
                 return redirect()->route('signup-complete', ['email' => $email, 'redirect' => 'ACCOUNT_INCOMPLETE']);
             }
         } else {
-            // Redirect to the verification route with the required parameters
-            $state = ucfirst(UuidV6::uuid6());
+            // Check if the user has no existing record in signupRequestVerification
+            $existingRecord = signupRequestVerification::where('email', $request->email)->first();
+
+            if (!$existingRecord) {
+                // No existing record found, create a new one
+                $state = ucfirst(UuidV6::uuid6());
+                $signupRequestID = new signupRequestVerification();
+                $signupRequestID->state = $state;
+                $signupRequestID->email = $request->email; // You may want to validate the email here
+                $signupRequestID->created_at = Carbon::now();
+                $signupRequestID->save();
+            }
+
             return redirect()->route('verification', ['state' => $state, 'email' => $user->email, 'redirect' => 'VERIFICATION_REQUIRED']);
         }
+
 
         $this->incrementLoginAttempts($request);
         Session::flash('error', 'Invalid ' . config('app.name') . ' account password/email. Please retry. Too many unsuccessful attempts will result in your account being locked.');
