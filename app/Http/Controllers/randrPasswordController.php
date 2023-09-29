@@ -43,47 +43,52 @@ class randrPasswordController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        $existingToken = PasswordResetToken::where('email', $request->email)->first();
+        // Check if the user has completed the signup
+        if ($user->registration_completed) {
+            $existingToken = PasswordResetToken::where('email', $request->email)->first();
 
-        // Check if an existing token is more than 4 hours old and delete it
-        if ($existingToken) {
-            $tokenCreatedAt = Carbon::parse($existingToken->created_at);
-            $fourHoursAgo = now()->subHours(4);
+            // Check if an existing token is more than 4 hours old and delete it
+            if ($existingToken) {
+                $tokenCreatedAt = Carbon::parse($existingToken->created_at);
+                $fourHoursAgo = now()->subHours(4);
 
-            if ($tokenCreatedAt->lte($fourHoursAgo)) {
-                $existingToken->delete();
-            } else {
-                return redirect(route('forgot-password'))->with('error', "There's a current operation in session, please use the previous link to reset your password or wait for 4 hours from the requested time to request it again.");
+                if ($tokenCreatedAt->lte($fourHoursAgo)) {
+                    $existingToken->delete();
+                } else {
+                    return redirect(route('forgot-password'))->with('error', "There's a current operation in session, please use the previous link to reset your password or wait for 4 hours from the requested time to request it again.");
+                }
             }
+
+            $token = $this->generateRandomString();
+
+            $passwordResetToken = new PasswordResetToken();
+            $passwordResetToken->email = $request->email;
+            $passwordResetToken->token = $token;
+            $passwordResetToken->created_at = Carbon::now();
+            $passwordResetToken->save();
+
+            $actionLink = route('reset-password', ['token' => $token, 'email' => $request->email]);
+            $time = Carbon::now();
+
+            $mailData = [
+                'action_link' => $actionLink,
+                'user' => $user,
+                'time' => $time,
+            ];
+
+            // Send the password reset instructions via email (uncomment this code when you are ready to send emails)
+            // try {
+            //     Mail::to($request->email)->send(new resetPasswordInstructions($mailData));
+            // } catch (\Exception $e) {
+            //     $errorMessage = 'There was an issue sending the password reset instructions. Please try again later. Or try checking your network connection and try again.';
+            //     return redirect()->back()->with('error', $errorMessage);
+            // }
+
+            return back()->with('success', "An email with the password reset instructions has successfully been sent to $user->email.");
+        } else {
+            // User has not completed the signup
+            return back()->with('error', 'You cannot reset your password because your registration is not complete.');
         }
-
-        $token = $this->generateRandomString();
-
-        $passwordResetToken = new PasswordResetToken();
-        $passwordResetToken->email = $request->email;
-        $passwordResetToken->token = $token;
-        $passwordResetToken->created_at = Carbon::now();
-        $passwordResetToken->save();
-
-        $actionLink = route('reset-password', ['token' => $token, 'email' => $request->email]);
-        $time = Carbon::now();
-
-        $mailData = [
-            'action_link' => $actionLink,
-            'user' => $user,
-            'time' => $time,
-        ];
-
-        // try {
-        //     Mail::to($request->email)->send(new resetPasswordInstructions($mailData));
-        // } catch (\Exception $e) {
-        //     $errorMessage = 'There was an issue sending the password reset instructions. Please try again later. Or try checking your network connection and try again.';
-        //     return redirect()->back()->with('error', $errorMessage);
-        // }
-
-        // echo ($actionLink);
-
-        return back()->with('success', "An email with the password reset instructions has successfully been sent to $user->email.");
     }
 
     public function showResetPasswordPage(Request $request)

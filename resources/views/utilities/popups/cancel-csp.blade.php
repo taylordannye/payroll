@@ -9,7 +9,7 @@
     </div>
     <div class="csp-action-btn">
         <div class="delete btn">
-            <button><i class="icofont-bin"></i>&nbsp;Delete</button>
+            <button onclick="window.location.href='{{ route('delete-user-signupData', ['email' => $email]) }}'"><i class="icofont-bin"></i>&nbsp;Delete</button>
         </div>
         <div class="cancel btn">
             <button onclick="window.location.href='#'"><i class="icofont-close"></i>&nbsp;Cancel</button>

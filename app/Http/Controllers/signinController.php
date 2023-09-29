@@ -18,16 +18,12 @@ class signinController extends Controller
     public function signin(Request $request)
     {
         $request->validate([
-            'email' => [
-                'required',
-                'email',
-            ],
-            'password' => [
-                'required',
-            ],
+            'email' => 'required|email',
+            'password' => 'required',
         ]);
 
         $throttles = $this->hasTooManyLoginAttempts($request);
+
         if ($throttles) {
             $this->fireLockoutEvent($request);
             $seconds = $this->limiter()->availableIn($this->throttleKey($request));
@@ -38,13 +34,22 @@ class signinController extends Controller
         }
 
         $credentials = $request->only('email', 'password');
+        $email = $request->input('email');
 
         if (Auth::attempt($credentials)) {
-            $this->clearLoginAttempts($request);
-            return redirect(route('dashboard'));
+            $user = Auth::user();
+            if ($user->registration_completed) {
+                $this->clearLoginAttempts($request);
+                return redirect(route('dashboard'));
+            } else {
+                // Log in the user temporarily
+                Auth::login($user);
+                // Redirect to the signup completion route
+                return redirect()->route('signup-complete', ['email' => $email, 'msg' => 'ACCOUNT_INCOMPLETE']);
+            }
         } else {
             $this->incrementLoginAttempts($request);
-            Session::flash('error', 'Invalid ' .config('app.name').' account password/email. Please retry. Too many unsuccessful attempts will result in your account being locked.');
+            Session::flash('error', 'Invalid ' . config('app.name') . ' account password/email. Please retry. Too many unsuccessful attempts will result in your account being locked.');
             return redirect()->back();
         }
     }
@@ -98,8 +103,11 @@ class signinController extends Controller
 
     public function signout()
     {
-        Auth::logout();
-
-        return redirect()->route('signin');
+        if (Auth::check()) {
+            Auth::logout();
+            return redirect()->route('signin', ['redirect' => 'COMMAND_EXECUTED_SUCCESSFULLY']);
+        } else {
+            return redirect()->route('signin', ['redirect' => 'COMMAND_ALREADY_EXECUTED']);
+        }
     }
 }

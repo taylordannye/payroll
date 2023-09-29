@@ -17,13 +17,10 @@ class IncompleteAccountMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::check()) {
-            $user = Auth::user();
-
-            if (!$user->registration_completed) {
-                return redirect()->route('signup.complete')->with('info', 'Please complete your signup process first');
-            }
+        } else {
+            // User is not authenticated, redirect to the signin page
+            return redirect()->route('signin', ['redirect' => 'AUTH_REQUIRED']);
         }
-
         return $next($request);
     }
 }

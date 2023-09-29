@@ -22,12 +22,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/dashboard', [dashboardController::class, 'showDashboardIndex'])->name('dashboard');
-Route::group(['prefix' => 'dashboard'], function () {
-    Route::get('/sign-up/csp', [signupController::class, 'completeRegistrationProcess'])->name('signup-complete');
-    Route::post('/sign-up/csp', [signupController::class, 'completeProcess'])->name('signup-complete.post');
-    Route::get('/sign-up/csp/delete', [signupController::class, 'deleteUserData'])->name('delete-user-signupData');
+Route::group(['prefix' => 'dashboard', 'middleware' => ['incomplete.account']], function () {
+    Route::get('/state/', [signupController::class, 'completeRegistrationProcess'])->name('signup-complete');
+    Route::post('/state/', [signupController::class, 'completeProcess'])->name('signup-complete.post');
+    Route::get('/state/delete', [signupController::class, 'deleteUserData'])->name('delete-user-signupData');
 });
-Route::group(['middleware' => ['guest', 'incomplete.account']], function () {
+Route::group(['middleware' => ['guest', 'guest']], function () {
     Route::get('/sign-up', [signupController::class, 'showSignupPage'])->name('signup');
     Route::post('/sign-up', [signupController::class, 'authorizeUserSignup'])->name('signup.post');
     Route::get('/verify', [verificationController::class, 'showVerificationPage'])->name('verification');

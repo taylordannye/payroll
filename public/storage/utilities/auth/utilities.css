@@ -8,7 +8,7 @@
     animation-timing-function: ease-in-out;
     animation-duration: 1s;
     animation-fill-mode: forwards;
-    animation-delay: .6s;
+    /* animation-delay: .6s; */
 }
 
 @keyframes slide-in-up {
@@ -53,17 +53,17 @@
 }
 
 .info-container{
-    background: #fffcc8;
-    color: var(--text-color);
+    background: rgb(185, 30, 3);
+    color: var(--background-color);
     border-radius: var(--base-border-radius);
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 10px;
-    border-left: 4px solid #009783;
     border-right: 1px solid var(--divider-color);
     border-top: 1px solid var(--divider-color);
     border-bottom: 1px solid var(--divider-color);
+    border-left: 6px solid #f44336;
     border-style: thin;
     font-family: var(--base-font-family);
 }
@@ -73,11 +73,18 @@
     align-items: center;
 }
 
+.info-text>p{
+    flex-grow: 1;
+    font-family: var(--base-font-family);
+    font-size: 0.8rem;
+    margin: 0 10px;
+}
+
 .icon-info{
     margin-right: 0.5rem;
     font-size: 1rem;
-    color: #fff;
-    background: #009783;
+    color: rgb(185, 30, 3);
+    background: #ffffff;
     padding: 2px;
     border-radius: var(--base-border-radius);
 }

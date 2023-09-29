@@ -148,6 +148,7 @@ class signupController extends Controller
             $user->dob = $request->input('dob');
             $user->password = Hash::make($request->input('password'));
             $user->allow_signup = false;
+            $user->registration_completed = true;
             $user->save();
             Auth::login($user);
             return redirect(route('dashboard'));
@@ -165,7 +166,7 @@ class signupController extends Controller
             return redirect()->back()->withInput()->withErrors(['error' => 'User was not found']);
         }else {
             $user->delete();
-            return redirect(route('signup'))->with(['success', 'The operation was successfully executed on '.Carbon::now(). '']);
+            return redirect(route('signup', ['msg' => 'EXECUTED_SUCCESSFULLY']));
         }
     }
 }

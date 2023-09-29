@@ -68,7 +68,7 @@ class verificationController extends Controller
         }
 
         // Check if the OTP has expired
-        if ($user->otp_expires_at->diffInMinutes(Carbon::now()) > 30) {
+        if ($user->otp_expires_at->diffInMinutes(now()) > 30) {
             // OTP has expired, you can handle this case (e.g., show an error message)
             return redirect()->route('verification', ['state' => $state, 'email' => $email])->with('error', 'That OTP code has expired. Please request for a new OTP.');
         }
@@ -84,7 +84,7 @@ class verificationController extends Controller
             $user->allow_signup = true;
             $user->save();
             $signupRequestID->delete();
-            Auth::login();
+            Auth::login($user);
             // Redirect to a success page
             return redirect()->route('signup-complete', ['email' => $email]);
         } else {
