@@ -62,24 +62,24 @@ class signupController extends Controller
             'time' => $time,
         ];
 
-        // try {
-        //     // Check DNS records to ensure the recipient's email domain is valid
-        //     $recipientEmail = $user->email;
-        //     $recipientDomain = substr(strrchr($recipientEmail, "@"), 1);
+        try {
+            // Check DNS records to ensure the recipient's email domain is valid
+            $recipientEmail = $user->email;
+            $recipientDomain = substr(strrchr($recipientEmail, "@"), 1);
 
-        //     if (!checkdnsrr($recipientDomain, 'MX')) {
-        //         // Invalid domain, handle the error
-        //         $errorMessage = 'There is an issue with the recipient\'s email domain. Please try again later.';
-        //         return redirect()->back()->with('error', $errorMessage);
-        //     }
+            if (!checkdnsrr($recipientDomain, 'MX')) {
+                // Invalid domain, handle the error
+                $errorMessage = 'There is an issue with the recipient\'s email domain. Please try again later.';
+                return redirect()->back()->with('error', $errorMessage);
+            }
 
-        //     // If DNS check is successful, send the email
-        //     Mail::to($recipientEmail)->send(new activateSignupRequest($mailData));
-        // } catch (\Exception $e) {
-        //     // Handle other exceptions (e.g., mail server issues)
-        //     $errorMessage = 'There was an issue sending password reset confirmation email. Please try again later.';
-        //     return redirect()->back()->with('error', $errorMessage);
-        // }
+            // If DNS check is successful, send the email
+            Mail::to($recipientEmail)->send(new activateSignupRequest($mailData));
+        } catch (\Exception $e) {
+            // Handle other exceptions (e.g., mail server issues)
+            $errorMessage = 'There was an issue sending password reset confirmation email. Please try again later.';
+            return redirect()->back()->with('error', $errorMessage);
+        }
 
         // Send a success message
         session()->flash('success', 'Please check ' . $user->email . ' for an OTP to verify your email address and complete registration.');
