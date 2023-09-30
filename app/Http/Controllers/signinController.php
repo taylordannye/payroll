@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Ramsey\Uuid\Rfc4122\UuidV6;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use App\Models\signupRequestVerification;
 
 class signinController extends Controller
 {
@@ -40,44 +36,23 @@ class signinController extends Controller
         $credentials = $request->only('email', 'password');
         $email = $request->input('email');
 
-        $user = User::where('email', $email)->first();
-
-        // Check if the user's otp and otp_expires_at are null
-        if ($user && $user->otp === null && $user->otp_expires_at === null) {
-            // Check if the user's registration is completed
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
             if ($user->registration_completed) {
-                if (Auth::attempt($credentials)) {
-                    $this->clearLoginAttempts($request);
-                    return redirect(route('dashboard'));
-                }
+                $this->clearLoginAttempts($request);
+                return redirect(route('dashboard'));
             } else {
+                // Log in the user temporarily
+                Auth::login($user);
                 // Redirect to the signup completion route
-                Auth::login($user); // Log in the user temporarily
                 return redirect()->route('signup-complete', ['email' => $email, 'redirect' => 'ACCOUNT_INCOMPLETE']);
             }
         } else {
-            // Check if the user has no existing record in signupRequestVerification
-            $existingRecord = signupRequestVerification::where('email', $request->email)->first();
-
-            if (!$existingRecord) {
-                // No existing record found, create a new one
-                $state = ucfirst(UuidV6::uuid6());
-                $signupRequestID = new signupRequestVerification();
-                $signupRequestID->state = $state;
-                $signupRequestID->email = $request->email; // You may want to validate the email here
-                $signupRequestID->created_at = Carbon::now();
-                $signupRequestID->save();
-            }
-
-            return redirect()->route('verification', ['state' => $state, 'email' => $user->email, 'redirect' => 'VERIFICATION_REQUIRED']);
+            $this->incrementLoginAttempts($request);
+            Session::flash('error', 'Invalid ' . config('app.name') . ' account password/email. Please retry. Too many unsuccessful attempts will result in your account being locked.');
+            return redirect()->back();
         }
-
-
-        $this->incrementLoginAttempts($request);
-        Session::flash('error', 'Invalid ' . config('app.name') . ' account password/email. Please retry. Too many unsuccessful attempts will result in your account being locked.');
-        return redirect()->back();
     }
-
 
     protected function hasTooManyLoginAttempts(Request $request)
     {

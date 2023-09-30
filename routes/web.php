@@ -22,7 +22,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/dashboard', [dashboardController::class, 'showDashboardIndex'])->name('dashboard');
-Route::group(['prefix' => 'dashboard', 'middleware' => ['incomplete.account']], function () {
+Route::group(['prefix' => 'dashboard', 'middleware' => ['incomplete.account', 'mustVerify.otp']], function () {
     Route::get('/state/', [signupController::class, 'completeRegistrationProcess'])->name('signup-complete');
     Route::post('/state/', [signupController::class, 'completeProcess'])->name('signup-complete.post');
     Route::get('/state/delete', [signupController::class, 'deleteUserData'])->name('delete-user-signupData');

@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 <div class="auth-membership-status">
-                    <p>Didn't receive the OTP? <onclick onclick="window.location.href='{{ route('resend-verification', ['state' => $state, 'email' => $email]) }}'">Resend</onclick></p>
+                    <p>Didn't receive the OTP? <onclick style="cursor: pointer" onclick="window.location.href='{{ route('resend-verification', ['state' => $state, 'email' => $email]) }}'">Resend</onclick></p>
                 </div>
             </form>
         </div>

@@ -43,7 +43,7 @@
                 </div>
                 <div class="input-group">
                     <input type="text" name="email" id="email" value="{{ $email }}" @required(true)
-                        @disabled(false)>
+                        @disabled(false) style="user-select: none; pointer-events: none;">
                 </div>
                 <div class="label-group">
                     <label for="legal-name">Enter legal fullname <span id="required">*</span></label>

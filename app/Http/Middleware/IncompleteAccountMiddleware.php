@@ -19,7 +19,7 @@ class IncompleteAccountMiddleware
         if (Auth::check()) {
         } else {
             // User is not authenticated, redirect to the signin page
-            return redirect()->route('signin', ['redirect' => 'AUTH_REQUIRED']);
+            return redirect()->route('signin', ['redirect' => 'AUTH_REQUIRED', 'url' => ''.config('app.url')]);
         }
         return $next($request);
     }

@@ -20,7 +20,7 @@ class verificationController extends Controller
         $user = User::where('email', $email)->first();
 
         if (!$signupRequestID || $signupRequestID->state !== $state) {
-            return redirect(route('signup'))->with('error', 'Oops, it seems there\'s an issue with the URL you\'re using. Contact technical support if the issue persists.');
+            return redirect(route('signup', ['redirect' => 'ACCESS_DENIED', 'url' => ''.config('app.url')]));
         }
 
         // Convert the created_at attribute to a Carbon instance
@@ -33,7 +33,7 @@ class verificationController extends Controller
         if ($stateAgeInHours > 24) {
             $signupRequestID->delete();
             $user->delete();
-            return redirect(route('signup'))->with('error', 'Unfortunately, your signup process was not completed within 24 hours. As a result, all records associated with your account have been permanently deleted.');
+            return redirect(route('signup', ['redirect' => 'SIGNUP_SESSION_EXPIRED', 'url' => ''.config('app.url')]));
         }
 
         return view('auth.verification', ['state' => $state, 'email' => $email]);
@@ -107,7 +107,6 @@ class verificationController extends Controller
         }
         // Save the user model with the new OTP and expiration time (if generated)
         $user->save();
-
         // Send the OTP to the user's email
         // Mail::to($user->email)->send(new OtpMail($user->otp));
         return redirect()->back()->with('success', 'A new OTP code has been sent to ' .$user->email);

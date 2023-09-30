@@ -21,16 +21,6 @@ class randrPasswordController extends Controller
         return view('auth.forgot-password');
     }
 
-    function generateRandomString()
-    {
-        $segment1 = base64_encode(Str::random(6));
-        $segment2 = base64_encode(Str::random(6));
-        $segment3 = base64_encode(Str::random(6));
-        $segment4 = base64_encode(Str::random(6));
-
-        return "{$segment1}-{$segment2}-{$segment3}-{$segment4}";
-    }
-
     public function sendPasswordResetInstructions(Request $request)
     {
         $request->validate([
@@ -59,7 +49,7 @@ class randrPasswordController extends Controller
                 }
             }
 
-            $token = $this->generateRandomString();
+            $token = Str::ucfirst(Str::uuid());
 
             $passwordResetToken = new PasswordResetToken();
             $passwordResetToken->email = $request->email;
@@ -84,7 +74,8 @@ class randrPasswordController extends Controller
             //     return redirect()->back()->with('error', $errorMessage);
             // }
 
-            return back()->with('success', "An email with the password reset instructions has successfully been sent to $user->email.");
+            // return back()->with('success', "An email with the password reset instructions has successfully been sent to $user->email.");
+            echo($actionLink);
         } else {
             // User has not completed the signup
             return back()->with('error', 'You cannot reset your password because your registration is not complete.');
@@ -100,7 +91,7 @@ class randrPasswordController extends Controller
         $passwordResetToken = PasswordResetToken::where('email', $email)->first();
 
         if (!$passwordResetToken || $passwordResetToken->token !== $token) {
-            return redirect(route('forgot-password'))->with('error', 'Oops, it seems there\'s an issue with the URL you\'re using. Contact technical support if the issue persists.');
+            return redirect(route('forgot-password', ['redirect' => 'ACCESS_FORBIDDEN', 'url' => ''.config('app.url')]));
         }
 
         // Convert the created_at attribute to a Carbon instance

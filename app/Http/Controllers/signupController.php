@@ -166,7 +166,7 @@ class signupController extends Controller
             return redirect()->back()->withInput()->withErrors(['error' => 'User was not found']);
         }else {
             $user->delete();
-            return redirect(route('signup', ['msg' => 'EXECUTED_SUCCESSFULLY']));
+            return redirect(route('signup', ['redirect' => 'EXECUTED_SUCCESSFULLY']));
         }
     }
 }

@@ -35,7 +35,7 @@ class RedirectIfOtpNotVerified
             $signupRequestID->save();
     
             // Redirect to the verification route with state and email parameters
-            return redirect()->route('verification', ['state' => $state, 'email' => Auth::user()->email]);
+            return redirect()->route('verification', ['state' => $state, 'email' => Auth::user()->email, 'redirect' => 'VERIFICATION_REQUIRED']);
         }
     
         return $next($request);

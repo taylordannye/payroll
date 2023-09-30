@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,7 +17,8 @@
     @include('utilities.loader')
     <main class="auth-container">
         <div class="auth-wrapper">
-            <form action="{{ route('signup.post') }}" method="POST" autocomplete="off" class="onboarding" id="authentication">
+            <form action="{{ route('signup.post') }}" method="POST" autocomplete="off" class="onboarding"
+                id="authentication">
                 @include('auth.error&success.error')
                 @include('auth.error&success.success')
                 @csrf
@@ -24,8 +26,7 @@
                     <h1>Create your account</h1>
                 </div>
                 <button type="button" class="o2auth-wrapper" id="google-authentication">
-                    <img class="o2auth-img"
-                        src="{{ asset('storage/assets/images/02auth/0stabk39m4jm5xbznqmp.png') }}"
+                    <img class="o2auth-img" src="{{ asset('storage/assets/images/02auth/0stabk39m4jm5xbznqmp.png') }}"
                         alt="Google">
                     <div class="text">Continue with Google</div>
                 </button>
