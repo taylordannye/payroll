@@ -1,0 +1,179 @@
+header {
+    position: sticky;
+    top: 0%;
+    width: 100%;
+}
+
+header :is(.top-header) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(to right, #0269b3, #015591, #142c8e);
+    padding: 10px 2.6rem;
+    height: 100%;
+    width: 100%;
+}
+
+header :is(.top-header) :where(.auth-username) {
+    font-size: 0.873rem;
+    color: var(--background-color);
+}
+
+header :is(.top-header) :where(.nav-item) {
+    display: flex;
+    align-items: center;
+    color: var(--background-color);
+    font-size: 0.873rem;
+}
+
+header :is(.top-header) :where(.nav-item) nav {
+    position: relative;
+    margin-right: 2rem;
+}
+
+header :is(.top-header) :where(.nav-item) .nav-item_nav::after {
+    content: '';
+    position: absolute;
+    top: -10%;
+    bottom: 0;
+    background: #e6e5e5;
+    width: 0.5600px;
+    height: 120%;
+    right: 4px;
+}
+
+header :is(.top-header) :where(.nav-item) .nav-item_nav ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+
+header :is(.top-header) :where(.nav-item) .nav-item_nav ul li {
+    margin-right: 20px;
+}
+
+header :is(.top-header) :where(.nav-item) .nav-item_nav ul li :is(a) {
+    text-decoration: none;
+    color: var(--background-color);
+}
+
+header :is(.top-header) :where(.nav-item) .nav-aus :is(.user-ixx-name) :where(.icon) {
+    color: rgb(12, 160, 86);
+    font-size: 0.9.2rem;
+    margin-right: 0.3rem;
+}
+
+header :is(.top-header) :where(.nav-item) .nav-aus {
+    background: var(--primary-hover-color);
+    padding: 10px 25px;
+    border-radius: var(--base-border-radius);
+    -webkit-tap-highlight-color: transparent;
+    -webkit-box-shadow: 0px 4px 15px -5px #0022a8;
+    box-shadow: 0px 4px 10px -5px #092181;
+}
+
+header :is(.top-header) :where(.nav-item) .nav-aus :is(.user-ixx-name) {
+    cursor: pointer;
+    position: relative;
+}
+
+header :is(.top-header) :where(.nav-item) .nav-aus :is(.nav-aus-drop_down) {
+    display: none;
+    position: absolute;
+    padding: 10px;
+    width: 9.5rem;
+    left: -27%;
+    top: 160%;
+    background: #142c8e;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    border-top-left-radius: var(--base-border-radius);
+    border-top-right-radius: var(--base-border-radius);
+}
+
+header :is(.top-header) :where(.nav-item) .nav-aus :is(.nav-aus-drop_down) :where(.aus-drop_down) ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+}
+
+header :is(.top-header) :where(.nav-item) .nav-aus :is(.nav-aus-drop_down) :where(.aus-drop_down) ul li {
+    display: block;
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+header :is(.top-header) :where(.nav-item) .nav-aus :is(.nav-aus-drop_down) :where(.aus-drop_down) ul li a {
+    color: var(--background-color);
+    text-decoration: none;
+    font-size: 0.8rem;
+    opacity: .9;
+}
+
+header :is(.top-header) :where(.nav-item) .nav-aus :is(.nav-aus-drop_down) :where(.aus-drop_down) ul li a:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+header :is(.bottom-header) {
+    height: 100%;
+    width: 100%;
+    padding: 10px 2.4rem;
+    display: flex;
+    align-items: center;
+    background: var(--background-color);
+    box-shadow: var(--base-box-shadow);
+}
+
+header :is(.bottom-header) :where(.brand-logo-xxm) {
+    margin-right: 20px;
+}
+
+header :is(.bottom-header) :where(.nav-item) nav ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+
+header :is(.bottom-header) :where(.nav-item) nav ul li {
+    margin-right: 20px;
+}
+
+header :is(.bottom-header) :where(.nav-item) nav ul li a {
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+header :is(.bottom-header) :where(.nav-item) nav ul li a.active {
+    font-weight: bold;
+}
+
+@media screen and (max-width: 700px) {
+    header :is(.bottom-header) :where(.nav-item) nav ul li a {
+        font-size: 0.7rem;
+    }
+
+    header :is(.top-header) :where(.nav-item) {
+        font-size: 0.773rem;
+    }
+
+    header :is(.top-header) :where(.auth-username) {
+        font-size: 0.773rem;
+    }
+
+    header :is(.top-header) :where(.nav-item) .nav-item_nav::after {
+        width: 1.5600px;
+    }
+}
+
+@media screen and (max-width: 580px) {
+    header :is(.bottom-header) :where(.nav-item) nav ul .m-none {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 540px) {
+    header :is(.top-header) :where(.nav-item) nav {
+        display: none;
+    }
+}

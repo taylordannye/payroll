@@ -16,7 +16,7 @@ class dashboardController extends Controller
                 return view('Dashboard.index');
             } else {
                 // Redirect to the signup completion route
-                return redirect()->route('signup-complete', ['email' => Auth::user()->email, 'redirect' => 'ACCOUNT_INCOMPLETE']);
+                return redirect()->route('signup-complete', ['email' => Auth::user()->email, 'redirect' => 'ACCOUNT_INCOMPLETE', 'url' => ''.config('app.url')]);
             }
         } else {
             // User is not authenticated, redirect to the signin page

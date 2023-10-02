@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Ramsey\Uuid\Rfc4122\UuidV6;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use App\Models\signupRequestVerification;
 
 class signinController extends Controller
 {
@@ -40,30 +36,23 @@ class signinController extends Controller
         $credentials = $request->only('email', 'password');
         $email = $request->input('email');
 
-        // Check if the user's otp and otp_expires_at are null
-        $user = User::where('email', $email)->first();
-
-        if ($user && $user->otp === null && $user->otp_expires_at === null) {
-            // Check if the user's registration is completed
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
             if ($user->registration_completed) {
-                if (Auth::attempt($credentials)) {
-                    $this->clearLoginAttempts($request);
-                    return redirect(route('dashboard'));
-                }
+                $this->clearLoginAttempts($request);
+                return redirect(route('dashboard'));
             } else {
+                // Log in the user temporarily
+                Auth::login($user);
                 // Redirect to the signup completion route
-                Auth::login($user); // Log in the user temporarily
-                return redirect()->route('signup-complete', ['email' => $email, 'redirect' => 'ACCOUNT_INCOMPLETE']);
+                return redirect()->route('signup-complete', ['email' => $email, 'redirect' => 'ACCOUNT_INCOMPLETE', 'url' => ''.config('app.url')]);
             }
         } else {
-            // If the email/password is incorrect, show the error message
-            Session::flash('error', 'Invalid ' . config('app.name') . ' account password/email. Please retry. Too many unsuccessful attempts will result in your account being locked.');
             $this->incrementLoginAttempts($request);
+            Session::flash('error', 'Invalid ' . config('app.name') . ' account password/email. Please retry. Too many unsuccessful attempts will result in your account being locked.');
             return redirect()->back();
         }
     }
-
-
 
     protected function hasTooManyLoginAttempts(Request $request)
     {

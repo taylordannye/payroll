@@ -17,7 +17,7 @@ class InternetConnectionMiddleware
     {
         $response = $next($request);
 
-         // Inject JavaScript to monitor internet connection status
+         // Injection of JavaScript to monitor internet connection status
          $script = <<<SCRIPT
          <script>
              function checkInternetConnection() {
