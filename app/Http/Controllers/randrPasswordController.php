@@ -67,15 +67,15 @@ class randrPasswordController extends Controller
             ];
 
             // Send the password reset instructions via email (uncomment this code when you are ready to send emails)
-            // try {
-            //     Mail::to($request->email)->send(new resetPasswordInstructions($mailData));
-            // } catch (\Exception $e) {
-            //     $errorMessage = 'There was an issue sending the password reset instructions. Please try again later. Or try checking your network connection and try again.';
-            //     return redirect()->back()->with('error', $errorMessage);
-            // }
+            try {
+                Mail::to($request->email)->send(new resetPasswordInstructions($mailData));
+            } catch (\Exception $e) {
+                $errorMessage = 'There was an issue sending the password reset instructions. Please try again later. Or try checking your network connection and try again.';
+                return redirect()->back()->with('error', $errorMessage);
+            }
 
-            // return back()->with('success', "An email with the password reset instructions has successfully been sent to $user->email.");
-            echo($actionLink);
+            return back()->with('success', "An email with the password reset instructions has successfully been sent to $user->email.");
+            // echo($actionLink);
         } else {
             // User has not completed the signup
             return back()->with('error', 'You cannot reset your password because your registration is not complete.');

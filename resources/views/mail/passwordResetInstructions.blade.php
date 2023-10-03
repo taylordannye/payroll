@@ -42,7 +42,7 @@
                 address system, so do not reply to this email alert. Only reply to <a
                     href="mailo:service@paysprint.com">service@paysprint.com.</a> We're available 24/7 to provide you
                 with assistance.</p>
-            <div class="location" style="line-height: 0.456rem;font-size:0.7rem;">
+            <div class="location" style="line-height: 0.456rem;font-size:0.8rem;">
                 <p>AY108 DEGU, ST</p>
                 <p>Kasoa, Semenshyia.</p>
                 <p>Ghana.</p>
