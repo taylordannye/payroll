@@ -118,6 +118,12 @@ class randrPasswordController extends Controller
             'password' => [
                 'required',
                 'regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
+                function ($attribute, $value, $fail) {
+                    $commonPasswords = ['password', 'passcode', 'admin', 'administrator'];
+                    if (preg_match('/\b(' . implode('|', $commonPasswords) . ')\b/i', $value)) {
+                        $fail('Your password contains a common or insecure word. Please choose a stronger password.');
+                    }
+                },
             ],
         ]);
         $user = User::where('email', $request->input('email'))->first();
